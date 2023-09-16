@@ -4,6 +4,6 @@ const {
   logoutUser,
 } = require('../controllers/users');
 
-router.post('/logout', logoutUser);
+router.post('/', logoutUser);
 
 module.exports = router;

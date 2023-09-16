@@ -45,7 +45,7 @@ app.use(requestLogger);
 
 app.use('/', loginRoute);
 app.use('/', registerRoute);
-app.use('/', auth, logoutRoute);
+app.use('/logout', auth, logoutRoute);
 
 app.use('/users', auth, usersRoute);
 app.use('/movies', auth, moviesRoute);
