@@ -9,14 +9,16 @@ const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const { errorLogger } = require('express-winston');
 const { default: helmet } = require('helmet');
+const limiter = require('./middlewares/rateLimiter');
 const cors = require('./middlewares/cors');
 
 const { requestLogger } = require('./middlewares/logger');
 
 const loginRoute = require('./routes/signin');
 const registerRoute = require('./routes/signup');
+const logoutRoute = require('./routes/logout');
 const moviesRoute = require('./routes/movies');
-const usersRoute = require('./routes/signin');
+const usersRoute = require('./routes/users');
 
 const { dataBaseUrl, PORT } = require('./utils/config');
 const auth = require('./middlewares/auth');
@@ -37,19 +39,22 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.use(limiter);
+
 app.use(requestLogger);
 
 app.use('/', loginRoute);
 app.use('/', registerRoute);
+app.use('/', auth, logoutRoute);
 
-app.use('/movies', auth, moviesRoute);
 app.use('/users', auth, usersRoute);
+app.use('/movies', auth, moviesRoute);
+
+app.use((req, res, next) => next(new NotFoundError('Страница не найдена')));
 
 app.use(errorLogger);
 
 app.use(errors());
-
-app.use((req, res, next) => next(new NotFoundError('Страница не найдена')));
 
 app.use(errorHandler);
 

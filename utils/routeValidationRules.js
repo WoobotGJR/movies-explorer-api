@@ -12,7 +12,6 @@ const createMovieValidation = {
     image: Joi.string().pattern(urlRegexPattern).required(),
     trailerLink: Joi.string().pattern(urlRegexPattern).required(),
     thumbnail: Joi.string().pattern(urlRegexPattern).required(),
-    owner: Joi.string().length(24).hex().required(),
     movieId: Joi.string().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
@@ -21,7 +20,7 @@ const createMovieValidation = {
 
 const deleteMovieValidation = {
   params: Joi.object().keys({
-    _id: Joi.string().required(),
+    _id: Joi.string().length(24).hex().required(),
   }),
 };
 

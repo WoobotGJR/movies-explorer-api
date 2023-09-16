@@ -13,7 +13,10 @@ module.exports.getCurrentUser = (req, res, next) => {
   User.findById(currentUserId)
     .orFail(new NotFoundError('Пользователь с данным id не найден'))
     .then((user) => res.send({ data: user }))
-    .catch(next);
+    .catch((err) => {
+      console.log(err);
+      next();
+    });
 };
 
 module.exports.updateUserInfo = (req, res, next) => {
@@ -46,9 +49,9 @@ module.exports.loginUser = (req, res, next) => {
         .cookie('jwt', token, {
           maxAge: 604800000, // длительность - 1 неделя
           httpOnly: true,
-          saeSite: 'none',
+          sameSite: 'none',
         })
-        .send({ message: 'Authorized', token }); // Данный ответ необходим, так как res.cookie не отправляет токен
+        .send({ message: 'Authorized' });
     })
     .catch(next);
 };
@@ -83,4 +86,16 @@ module.exports.registerUser = (req, res, next) => {
         }
       }))
     .catch(next);
+};
+
+// https://expressjs.com/ru/api.html#res.clearCookie
+module.exports.logoutUser = (req, res, next) => {
+  try {
+    res.clearCookie('jwt');
+    res.send({
+      message: 'Logged out',
+    });
+  } catch (err) {
+    next(err);
+  }
 };

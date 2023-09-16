@@ -27,6 +27,7 @@ const userSchema = new mongoose.Schema(
       default: 'Default Username',
     },
   },
+  { versionKey: false },
 );
 
 // eslint-disable-next-line func-names
