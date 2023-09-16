@@ -1,4 +1,4 @@
-const dataBaseUrl = 'mongodb://127.0.0.1:27017/bitfilmsdb';
+const dataBaseUrl = process.env.DB_CONNECTION_STRING;
 
 const { PORT = 3000 } = process.env;
 

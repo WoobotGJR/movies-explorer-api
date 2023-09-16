@@ -12,7 +12,7 @@ const createMovieValidation = {
     image: Joi.string().pattern(urlRegexPattern).required(),
     trailerLink: Joi.string().pattern(urlRegexPattern).required(),
     thumbnail: Joi.string().pattern(urlRegexPattern).required(),
-    movieId: Joi.string().required(),
+    movieId: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
   }),
