@@ -12,7 +12,7 @@ module.exports.getMovies = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.createMovie = (req, res, next) => {
+module.exports.saveMovie = (req, res, next) => {
   const {
     country,
     director,
@@ -27,22 +27,20 @@ module.exports.createMovie = (req, res, next) => {
     movieId,
   } = req.body;
 
-  Movie.create(
-    {
-      country,
-      director,
-      duration,
-      year,
-      description,
-      image,
-      trailerLink,
-      thumbnail,
-      owner: req.user._id,
-      movieId,
-      nameRU,
-      nameEN,
-    },
-  )
+  Movie.create({
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailerLink,
+    thumbnail,
+    owner: req.user._id,
+    movieId,
+    nameRU,
+    nameEN,
+  })
     .then((movie) => res.status(201).send({ data: movie }))
     .catch(next);
 };
@@ -57,7 +55,10 @@ module.exports.deleteMovieById = (req, res, next) => {
         throw new ForbiddenError('Доступ к ресурсу запрещён');
       }
 
-      return movie.deleteOne().then(res.send({ data: movie })).catch(next);
+      return movie
+        .deleteOne()
+        .then(res.send({ data: movie }))
+        .catch(next);
     })
     .catch(next);
 };

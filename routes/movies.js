@@ -3,7 +3,7 @@ const { celebrate } = require('celebrate');
 
 const {
   getMovies,
-  createMovie,
+  saveMovie,
   deleteMovieById,
 } = require('../controllers/movies');
 
@@ -14,7 +14,7 @@ const {
 
 router.get('/', getMovies);
 
-router.post('/', celebrate(createMovieValidation), createMovie);
+router.post('/', celebrate(createMovieValidation), saveMovie);
 
 router.delete('/:_id', celebrate(deleteMovieValidation), deleteMovieById);
 
