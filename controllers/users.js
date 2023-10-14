@@ -14,8 +14,7 @@ module.exports.getCurrentUser = (req, res, next) => {
     .orFail(new NotFoundError('Пользователь с данным id не найден'))
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      // console.log(err);
-      next();
+      next(err);
     });
 };
 
@@ -25,14 +24,14 @@ module.exports.updateUserInfo = (req, res, next) => {
   User.findByIdAndUpdate(
     req.user._id,
     { name, email },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   )
     .orFail(new NotFoundError('Пользователь с данным id не найден'))
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.code === 11000) {
         next(
-          new ConflictError('Пользователь с данным email уже зарегистрирован')
+          new ConflictError('Пользователь с данным email уже зарегистрирован'),
         );
       } else {
         next(err);
@@ -49,7 +48,7 @@ module.exports.loginUser = (req, res, next) => {
       const token = jwt.sign(
         { _id: user._id },
         NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', // cгенерирован единожды с помощью node -e "console.log(require('crypto').randomBytes(32).toString('hex'));"
-        { expiresIn: '7d' }
+        { expiresIn: '7d' },
       );
 
       // https://stackoverflow.com/questions/58228871/cookies-and-samesite-secure-expressjs
@@ -61,7 +60,7 @@ module.exports.loginUser = (req, res, next) => {
           secure: true,
         })
         .send(
-          { message: 'Authorized' }
+          { message: 'Authorized' },
           // { email: user.email, name: user.name, _id: user._id }
         );
     })
@@ -89,22 +88,21 @@ module.exports.registerUser = (req, res, next) => {
               email: user.email,
               _id: user._id,
             },
-          })
+          }),
         )
         .catch((err) => {
           if (err.code === 11000) {
             next(
               new ConflictError(
-                'Пользователь с данным email уже зарегистрирован'
-              )
+                'Пользователь с данным email уже зарегистрирован',
+              ),
             );
           } else {
             next(err);
           }
-        })
+        }),
     )
     .catch((err) => {
-      console.log(err);
       next(err);
     });
 };

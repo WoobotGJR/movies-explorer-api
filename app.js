@@ -10,7 +10,7 @@ const { errors } = require('celebrate');
 const { errorLogger } = require('express-winston');
 const { default: helmet } = require('helmet');
 const limiter = require('./middlewares/rateLimiter');
-const cors = require('./middlewares/cors');
+const cors = require('cors');
 
 const { requestLogger } = require('./middlewares/logger');
 
@@ -32,7 +32,18 @@ mongoose.connect(dataBaseUrl, {
 
 const app = express();
 
-app.use(cors);
+app.use(
+  cors({
+    origin: [
+      'https://woobotgjr.movies.nomoredomainsrocks.ru',
+      'http://woobotgjr.movies.nomoredomainsrocks.ru',
+      'http://localhost:3001',
+      'http://localhost:3000',
+    ],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  }),
+);
 app.use(helmet());
 
 app.use(bodyParser.json());
