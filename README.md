@@ -24,7 +24,7 @@ backend - https://api.woobotgjr.movies.nomoredomainsrocks.ru/"
 
 <a name="project-installation"><h2>2. Эксплуатация проекта</h2></a>
 
-1. git clone https://github.com/WoobotGJR/movies-explorer-frontend - клонировать репозиторий
+1. git clone https://github.com/WoobotGJR/movies-explorer-api - клонировать репозиторий
 2. npm i - установить зависимости (dependencies)
 3. npm run start - запустить приложение
 4. npm run build - создать build приложения
